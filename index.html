@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Workout Tracker</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="main-container p-4">
+        <!-- Header -->
+        <div class="text-center mb-4">
+          <h1 class="display-4 fw-bold text-primary">
+            <i class="fas fa-dumbbell me-3"></i>Workout Tracker
+          </h1>
+          <p class="lead text-muted">
+            Track your fitness journey and crush your goals!
+          </p>
+        </div>
+
+        <!-- Navigation -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="workoutTabs">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              data-bs-toggle="pill"
+              href="#log-workout"
+            >
+              <i class="fas fa-plus me-2"></i>Log Workout
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="pill" href="#progress">
+              <i class="fas fa-chart-line me-2"></i>Progress
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="pill" href="#calendar">
+              <i class="fas fa-calendar me-2"></i>Calendar
+            </a>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+          <!-- Log Workout Tab -->
+          <div class="tab-pane fade show active" id="log-workout">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-dumbbell me-2"></i>Log New Workout
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="workoutForm">
+                      <div class="mb-3">
+                        <label class="form-label fw-bold">Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="workoutDate"
+                          required
+                        />
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label fw-bold">Muscle Group</label>
+                        <select class="form-select" id="muscleGroup" required>
+                          <option value="">Select muscle group...</option>
+                          <option value="Chest">Chest</option>
+                          <option value="Back">Back</option>
+                          <option value="Legs">Legs</option>
+                          <option value="Shoulders">Shoulders</option>
+                          <option value="Biceps">Biceps</option>
+                          <option value="Triceps">Triceps</option>
+                        </select>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label fw-bold">Exercise</label>
+                        <select
+                          class="form-select"
+                          id="exercise"
+                          required
+                          disabled
+                        >
+                          <option value="">Select exercise...</option>
+                        </select>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label fw-bold">Weight (kg)</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="weight"
+                            min="0"
+                            step="0.5"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label fw-bold">Sets</label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="sets"
+                            min="1"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label fw-bold">Reps per Set</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="reps"
+                          min="1"
+                          required
+                        />
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label fw-bold"
+                          >Notes (Optional)</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="notes"
+                          rows="3"
+                          placeholder="How did you feel? Any pain or energy notes..."
+                        ></textarea>
+                      </div>
+
+                      <div id="progressSuggestion"></div>
+
+                      <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-save me-2"></i>Log Workout
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <!-- Body Weight Tracker -->
+                <div class="card mb-4">
+                  <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-weight me-2"></i>Body Weight
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="weightForm">
+                      <div class="row">
+                        <div class="col-8">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="bodyWeight"
+                            placeholder="Enter weight (kg)"
+                            min="30"
+                            max="300"
+                            step="0.1"
+                          />
+                        </div>
+                        <div class="col-4">
+                          <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <div id="currentWeight" class="mt-3"></div>
+                  </div>
+                </div>
+
+                <!-- Recent Workouts -->
+                <div class="card">
+                  <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-history me-2"></i>Recent Workouts
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div id="recentWorkouts">
+                      <p class="text-muted text-center">
+                        No recent workouts found.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Tab -->
+          <div class="tab-pane fade" id="progress">
+            <div class="row mb-4">
+              <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                  <div class="stat-number" id="totalWorkouts">0</div>
+                  <div class="text-muted">Total Workouts</div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                  <div class="stat-number" id="totalVolume">0</div>
+                  <div class="text-muted">Total Volume (kg)</div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                  <div class="stat-number" id="avgWeight">0</div>
+                  <div class="text-muted">Avg Weight (kg)</div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="stat-card">
+                  <div class="stat-number" id="thisWeekWorkouts">0</div>
+                  <div class="text-muted">This Week</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-trophy me-2"></i>Personal Bests
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div id="personalBests"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-chart-bar me-2"></i>Volume by Muscle
+                      Group
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div id="volumeByMuscle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                      <i class="fas fa-weight me-2"></i>Body Weight Progress
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-container">
+                      <canvas id="weightChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Tab -->
+          <div class="tab-pane fade" id="calendar">
+            <div class="card">
+              <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                  <i class="fas fa-calendar-alt me-2"></i>Workout Calendar
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="text-center mb-3">
+                  <button class="btn btn-outline-primary" id="prevMonth">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <span class="mx-3 fw-bold" id="currentMonth"></span>
+                  <button class="btn btn-outline-primary" id="nextMonth">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+                <div id="calendarGrid" class="text-center"></div>
+                <div class="mt-3 text-center">
+                  <span class="badge bg-success me-2">
+                    <i class="fas fa-circle"></i> Workout Day
+                  </span>
+                  <span class="badge bg-secondary">
+                    <i class="fas fa-circle"></i> No Workout
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+      // Exercise database organized by muscle groups
+      const exercises = {
+        Chest: [
+          // Upper Chest
+          "Incline Dumbbell Press",
+          "Incline Bench Press",
+          "Incline Barbell Press",
+          // Mid Chest
+          "Flat Bench Press",
+          "Flat Dumbbell Press",
+          "Push-ups",
+          // Lower Chest
+          "Decline Dumbbell Press",
+          "Decline Bench Press",
+          "Chest Dips",
+          // Isolation
+          "Incline Dumbbell Fly",
+          "Flat Dumbbell Fly",
+          "Decline Dumbbell Fly",
+          "Cable Crossover",
+          "Pec Deck Fly",
+        ],
+        Back: [
+          // Lats
+          "Chin-ups",
+          "Pull-ups",
+          "Wide-Grip Pull-ups",
+          "Lat Pulldown",
+          "Wide-Grip Lat Pulldown",
+          // Middle Back
+          "Wide-Grip Seated Row",
+          "Cable Rows",
+          "Dumbbell Row",
+          "Single-Arm Dumbbell Row",
+          "Barbell Rows",
+          "T-Bar Rows",
+          // Lower Back
+          "Hyperextension",
+          "Good Mornings",
+          "Deadlifts",
+          "Romanian Deadlifts",
+          // Rear Delts (Back exercises)
+          "Rear Delt Fly",
+          "Face Pull",
+          "Reverse Fly",
+        ],
+        Legs: [
+          // Quads
+          "Leg Press",
+          "Squats",
+          "Half Squats",
+          "Front Squats",
+          "Leg Extensions",
+          "Bulgarian Split Squats",
+          "Lunges",
+          // Hamstrings
+          "Leg Curl",
+          "Romanian Deadlifts",
+          "Stiff Leg Deadlifts",
+          "Walking Lunges",
+          // Glutes
+          "Hip Thrusts",
+          "Glute Bridges",
+          "Sumo Squats",
+          // Calves
+          "Standing Calf Raise",
+          "Seated Calf Raise",
+          "Calf Press on Leg Press",
+          "Single Leg Calf Raise",
+        ],
+        Shoulders: [
+          // Front Delts
+          "Seated Dumbbell Shoulder Press",
+          "Standing Military Press",
+          "Overhead Press",
+          "Arnold Press",
+          "Front Raises",
+          // Side Delts
+          "Dumbbell Lateral Raise",
+          "Cable Lateral Raise",
+          "Machine Lateral Raise",
+          "Upright Row",
+          "Upright Row (Bar)",
+          "Upright Row (Plate)",
+          // Rear Delts
+          "Rear Delt Fly",
+          "Face Pull",
+          "Reverse Fly",
+          "Bent-Over Lateral Raise",
+          // Traps
+          "Shrugs",
+          "Dumbbell Shrugs",
+          "Barbell Shrugs",
+        ],
+        Biceps: [
+          // Short Head
+          "EZ Bar Curl",
+          "Barbell Curls",
+          "Wide-Grip Barbell Curl",
+          // Long Head
+          "Incline Dumbbell Curl",
+          "Hammer Curl",
+          "Hammer Curl (Alternating)",
+          "Cross-Body Hammer Curl",
+          // Peak
+          "Preacher Curl",
+          "EZ Bar Preacher Curl",
+          "Dumbbell Preacher Curl",
+          "Concentration Curl",
+          // Brachialis
+          "Cable Curls",
+          "Cable Hammer Curl",
+          "Reverse Curls",
+          // Compound
+          "Chin-ups",
+          "21s Curls",
+        ],
+        Triceps: [
+          // Long Head
+          "Overhead Tricep Extension",
+          "Overhead One-Arm Dumbbell Extension",
+          "Seated Overhead Extension",
+          "French Press",
+          "Lying Tricep Extension (Skullcrusher)",
+          // Lateral Head
+          "Cable Pushdown",
+          "Tricep Pushdowns",
+          "Rope Pushdowns",
+          "V-Bar Pushdowns",
+          // Medial Head
+          "Bench Dips",
+          "Tricep Dips",
+          "Close-Grip Push-ups",
+          "Diamond Push-ups",
+          // Compound
+          "Close-Grip Bench Press",
+          "Tricep Bench Press",
+        ],
+      };
+
+      // Initialize the app
+      class WorkoutTracker {
+        constructor() {
+          this.workouts = this.loadWorkouts();
+          this.bodyWeights = this.loadBodyWeights();
+          this.currentDate = new Date();
+          this.init();
+        }
+
+        init() {
+          this.setupEventListeners();
+          this.setTodayDate();
+          this.updateRecentWorkouts();
+          this.updateProgressStats();
+          this.updateCurrentWeight();
+          this.renderCalendar();
+        }
+
+        // Load data from memory (simulating localStorage)
+        loadWorkouts() {
+          return window.workoutData || [];
+        }
+
+        loadBodyWeights() {
+          return window.bodyWeightData || [];
+        }
+
+        // Save data to memory (simulating localStorage)
+        saveWorkouts() {
+          window.workoutData = this.workouts;
+        }
+
+        saveBodyWeights() {
+          window.bodyWeightData = this.bodyWeights;
+        }
+
+        setupEventListeners() {
+          // Workout form submission
+          document
+            .getElementById("workoutForm")
+            .addEventListener("submit", (e) => {
+              e.preventDefault();
+              this.logWorkout();
+            });
+
+          // Body weight form submission
+          document
+            .getElementById("weightForm")
+            .addEventListener("submit", (e) => {
+              e.preventDefault();
+              this.logBodyWeight();
+            });
+
+          // Muscle group selection
+          document
+            .getElementById("muscleGroup")
+            .addEventListener("change", (e) => {
+              this.updateExerciseOptions(e.target.value);
+            });
+
+          // Exercise selection for progressive overload suggestion
+          document.getElementById("exercise").addEventListener("change", () => {
+            this.showProgressiveSuggestion();
+          });
+
+          // Calendar navigation
+          document.getElementById("prevMonth").addEventListener("click", () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+            this.renderCalendar();
+          });
+
+          document.getElementById("nextMonth").addEventListener("click", () => {
+            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+            this.renderCalendar();
+          });
+
+          // Tab switching updates
+          document
+            .querySelectorAll('[data-bs-toggle="pill"]')
+            .forEach((tab) => {
+              tab.addEventListener("shown.bs.tab", (e) => {
+                if (e.target.getAttribute("href") === "#progress") {
+                  this.updateProgressStats();
+                  this.renderWeightChart();
+                }
+              });
+            });
+        }
+
+        setTodayDate() {
+          const today = new Date().toISOString().split("T")[0];
+          document.getElementById("workoutDate").value = today;
+        }
+
+        updateExerciseOptions(muscleGroup) {
+          const exerciseSelect = document.getElementById("exercise");
+          exerciseSelect.innerHTML =
+            '<option value="">Select exercise...</option>';
+
+          if (muscleGroup && exercises[muscleGroup]) {
+            exercises[muscleGroup].forEach((exercise) => {
+              const option = document.createElement("option");
+              option.value = exercise;
+              option.textContent = exercise;
+              exerciseSelect.appendChild(option);
+            });
+            exerciseSelect.disabled = false;
+          } else {
+            exerciseSelect.disabled = true;
+          }
+
+          // Clear progressive suggestion when muscle group changes
+          document.getElementById("progressSuggestion").innerHTML = "";
+        }
+
+        showProgressiveSuggestion() {
+          const exercise = document.getElementById("exercise").value;
+          if (!exercise) return;
+
+          // Find the last workout for this exercise
+          const lastWorkout = this.workouts
+            .filter((w) => w.exercise === exercise)
+            .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+          const suggestionDiv = document.getElementById("progressSuggestion");
+
+          if (lastWorkout) {
+            const suggestedWeight = parseFloat(lastWorkout.weight) + 2.5;
+            const suggestedReps = lastWorkout.reps;
+
+            suggestionDiv.innerHTML = `
+                        <div class="progress-suggestion">
+                            <h6 class="fw-bold mb-2">
+                                <i class="fas fa-lightbulb me-2"></i>Progressive Overload Suggestion
+                            </h6>
+                            <p class="mb-2">
+                                Last time: <strong>${
+                                  lastWorkout.weight
+                                }kg</strong> for <strong>${
+              lastWorkout.sets
+            } sets × ${lastWorkout.reps} reps</strong>
+                                <br><small class="text-muted">${this.formatDate(
+                                  lastWorkout.date
+                                )}</small>
+                            </p>
+                            <p class="mb-0">
+                                <strong>Try today:</strong> ${suggestedWeight}kg for ${
+              lastWorkout.sets
+            } sets × ${suggestedReps} reps
+                                <button class="btn btn-sm btn-warning ms-2" onclick="workoutTracker.applySuggestion(${suggestedWeight}, ${
+              lastWorkout.sets
+            }, ${suggestedReps})">
+                                    Apply Suggestion
+                                </button>
+                            </p>
+                        </div>
+                    `;
+          } else {
+            suggestionDiv.innerHTML = `
+                        <div class="progress-suggestion">
+                            <h6 class="fw-bold mb-2">
+                                <i class="fas fa-star me-2"></i>First Time Doing This Exercise!
+                            </h6>
+                            <p class="mb-0">Start with a weight that allows you to complete all reps with good form.</p>
+                        </div>
+                    `;
+          }
+        }
+
+        applySuggestion(weight, sets, reps) {
+          document.getElementById("weight").value = weight;
+          document.getElementById("sets").value = sets;
+          document.getElementById("reps").value = reps;
+        }
+
+        logWorkout() {
+          // Get form values
+          const date = document.getElementById("workoutDate").value;
+          const muscleGroup = document.getElementById("muscleGroup").value;
+          const exercise = document.getElementById("exercise").value;
+          const weight = parseFloat(document.getElementById("weight").value);
+          const sets = parseInt(document.getElementById("sets").value);
+          const reps = parseInt(document.getElementById("reps").value);
+          const notes = document.getElementById("notes").value.trim();
+
+          // Validate required fields
+          if (!date || !muscleGroup || !exercise || !weight || !sets || !reps) {
+            this.showNotification(
+              "Please fill in all required fields!",
+              "danger"
+            );
+            return;
+          }
+
+          if (weight <= 0 || sets <= 0 || reps <= 0) {
+            this.showNotification(
+              "Weight, sets, and reps must be greater than 0!",
+              "danger"
+            );
+            return;
+          }
+
+          // Create workout object
+          const workout = {
+            id: Date.now(),
+            date: date,
+            muscleGroup: muscleGroup,
+            exercise: exercise,
+            weight: weight,
+            sets: sets,
+            reps: reps,
+            notes: notes,
+            volume: weight * sets * reps,
+          };
+
+          // Check if this is a personal record
+          const previousBest = this.workouts
+            .filter((w) => w.exercise === exercise)
+            .sort((a, b) => b.weight - a.weight)[0];
+
+          let isPersonalRecord = false;
+          if (!previousBest || weight > previousBest.weight) {
+            isPersonalRecord = true;
+          }
+
+          // Add workout to array
+          this.workouts.push(workout);
+          this.saveWorkouts();
+
+          // Show success message with PR notification
+          let message = "Workout logged successfully!";
+          if (isPersonalRecord) {
+            if (previousBest) {
+              message = `🏆 NEW PERSONAL RECORD! ${weight}kg (Previous: ${previousBest.weight}kg)`;
+            } else {
+              message = `🎉 First time doing ${exercise}! Great start!`;
+            }
+          }
+          this.showNotification(
+            message,
+            isPersonalRecord ? "warning" : "success"
+          );
+
+          // Reset form
+          this.resetWorkoutForm();
+
+          // Update all relevant sections
+          this.updateAllSections();
+        }
+
+        resetWorkoutForm() {
+          document.getElementById("workoutForm").reset();
+          this.setTodayDate();
+          document.getElementById("exercise").disabled = true;
+          document.getElementById("exercise").innerHTML =
+            '<option value="">Select exercise...</option>';
+          document.getElementById("progressSuggestion").innerHTML = "";
+        }
+
+        updateAllSections() {
+          // Update recent workouts display
+          this.updateRecentWorkouts();
+
+          // Update progress statistics
+          this.updateProgressStats();
+
+          // Update current weight display
+          this.updateCurrentWeight();
+
+          // Update calendar to show new workout day
+          this.renderCalendar();
+
+          // If we're on the progress tab, update the chart
+          const progressTab = document.querySelector('[href="#progress"]');
+          if (progressTab && progressTab.classList.contains("active")) {
+            this.renderWeightChart();
+          }
+        }
+
+        logBodyWeight() {
+          const weightInput = document.getElementById("bodyWeight");
+          const weight = parseFloat(weightInput.value);
+
+          if (!weight || weight <= 0) {
+            this.showNotification("Please enter a valid weight!", "danger");
+            return;
+          }
+
+          const date = new Date().toISOString().split("T")[0];
+
+          // Check if weight for today already exists
+          const existingIndex = this.bodyWeights.findIndex(
+            (w) => w.date === date
+          );
+
+          if (existingIndex >= 0) {
+            this.bodyWeights[existingIndex].weight = weight;
+            this.showNotification("Body weight updated for today!", "info");
+          } else {
+            this.bodyWeights.push({ date, weight });
+            this.showNotification(
+              "Body weight recorded successfully!",
+              "success"
+            );
+          }
+
+          this.saveBodyWeights();
+          weightInput.value = "";
+          this.updateCurrentWeight();
+        }
+
+        updateRecentWorkouts() {
+          const recentDiv = document.getElementById("recentWorkouts");
+          const recent = this.workouts
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 6); // Show 6 workouts in a 2x3 grid
+
+          if (recent.length === 0) {
+            recentDiv.innerHTML =
+              '<p class="text-muted text-center">No recent workouts found.<br>Start logging your first workout!</p>';
+            return;
+          }
+
+          // Create a grid of square workout cards
+          recentDiv.innerHTML = `
+                    <div class="row g-2">
+                        ${recent
+                          .map(
+                            (workout) => `
+                            <div class="col-6 col-md-4">
+                                <div class="card h-100 workout-card-mini">
+                                    <div class="card-body p-2 d-flex flex-column">
+                                        <div class="text-center">
+                                            <h6 class="fw-bold text-primary mb-1 small">${
+                                              workout.exercise
+                                            }</h6>
+                                            <span class="badge bg-light text-dark mb-2 small">${
+                                              workout.muscleGroup
+                                            }</span>
+                                        </div>
+                                        <div class="text-center flex-grow-1 d-flex flex-column justify-content-center">
+                                            <div class="fw-bold text-success mb-1">${
+                                              workout.weight
+                                            }kg</div>
+                                            <small class="text-muted">${
+                                              workout.sets
+                                            }×${workout.reps}</small>
+                                            <small class="text-primary">${workout.volume.toFixed(
+                                              0
+                                            )}kg vol</small>
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <small class="text-muted">${this.formatDateShort(
+                                              workout.date
+                                            )}</small>
+                                            ${
+                                              workout.notes
+                                                ? '<br><i class="fas fa-sticky-note text-warning"></i>'
+                                                : ""
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                `;
+        }
+
+        updateProgressStats() {
+          // Total workouts
+          document.getElementById("totalWorkouts").textContent =
+            this.workouts.length;
+
+          // Total volume
+          const totalVolume = this.workouts.reduce(
+            (sum, w) => sum + w.volume,
+            0
+          );
+          document.getElementById("totalVolume").textContent =
+            totalVolume.toFixed(0);
+
+          // Average weight
+          const avgWeight =
+            this.workouts.length > 0
+              ? this.workouts.reduce((sum, w) => sum + w.weight, 0) /
+                this.workouts.length
+              : 0;
+          document.getElementById("avgWeight").textContent =
+            avgWeight.toFixed(1);
+
+          // This week's workouts
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          const thisWeek = this.workouts.filter(
+            (w) => new Date(w.date) >= oneWeekAgo
+          ).length;
+          document.getElementById("thisWeekWorkouts").textContent = thisWeek;
+
+          // Personal bests
+          this.updatePersonalBests();
+
+          // Volume by muscle group
+          this.updateVolumeByMuscle();
+        }
+
+        updatePersonalBests() {
+          const bestsDiv = document.getElementById("personalBests");
+          const bests = {};
+
+          // Find the best (highest weight) for each exercise
+          this.workouts.forEach((workout) => {
+            if (
+              !bests[workout.exercise] ||
+              workout.weight > bests[workout.exercise].weight
+            ) {
+              bests[workout.exercise] = workout;
+            }
+          });
+
+          const bestsArray = Object.values(bests)
+            .sort((a, b) => b.weight - a.weight)
+            .slice(0, 10); // Show top 10 personal bests
+
+          if (bestsArray.length === 0) {
+            bestsDiv.innerHTML =
+              '<p class="text-muted text-center">No personal bests yet. Start logging workouts!</p>';
+            return;
+          }
+
+          bestsDiv.innerHTML = bestsArray
+            .map((best) => {
+              // Check if this is a recent PR (within last 7 days)
+              const daysSincePR = Math.floor(
+                (new Date() - new Date(best.date)) / (1000 * 60 * 60 * 24)
+              );
+              const isRecentPR = daysSincePR <= 7;
+
+              return `
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom ${
+                          isRecentPR ? "bg-light" : ""
+                        }">
+                            <div>
+                                <strong>${best.exercise}</strong>
+                                ${
+                                  isRecentPR
+                                    ? '<span class="badge bg-warning text-dark ms-2">NEW!</span>'
+                                    : ""
+                                }
+                                <br><small class="text-muted">${
+                                  best.muscleGroup
+                                }</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-bold text-primary">${
+                                  best.weight
+                                }kg</span>
+                                <br><small class="text-muted">${best.sets}×${
+                best.reps
+              }</small>
+                                <br><small class="text-secondary">${this.formatDateShort(
+                                  best.date
+                                )}</small>
+                            </div>
+                        </div>
+                    `;
+            })
+            .join("");
+        }
+
+        updateVolumeByMuscle() {
+          const volumeDiv = document.getElementById("volumeByMuscle");
+          const volumeByMuscle = {};
+
+          this.workouts.forEach((workout) => {
+            if (!volumeByMuscle[workout.muscleGroup]) {
+              volumeByMuscle[workout.muscleGroup] = 0;
+            }
+            volumeByMuscle[workout.muscleGroup] += workout.volume;
+          });
+
+          const sortedMuscles = Object.entries(volumeByMuscle).sort(
+            ([, a], [, b]) => b - a
+          );
+
+          if (sortedMuscles.length === 0) {
+            volumeDiv.innerHTML =
+              '<p class="text-muted text-center">No volume data yet.</p>';
+            return;
+          }
+
+          const maxVolume = Math.max(
+            ...sortedMuscles.map(([, volume]) => volume)
+          );
+
+          volumeDiv.innerHTML = sortedMuscles
+            .map(([muscle, volume]) => {
+              const percentage = (volume / maxVolume) * 100;
+              return `
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-medium">${muscle}</span>
+                                <span class="text-primary fw-bold">${volume.toFixed(
+                                  0
+                                )}kg</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+            })
+            .join("");
+        }
+
+        updateCurrentWeight() {
+          const currentWeightDiv = document.getElementById("currentWeight");
+          const latest = this.bodyWeights.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          )[0];
+
+          if (latest) {
+            const daysSince = Math.floor(
+              (new Date() - new Date(latest.date)) / (1000 * 60 * 60 * 24)
+            );
+            const timeText =
+              daysSince === 0
+                ? "Today"
+                : daysSince === 1
+                ? "Yesterday"
+                : `${daysSince} days ago`;
+
+            currentWeightDiv.innerHTML = `
+                        <div class="text-center">
+                            <h4 class="text-success mb-1">${latest.weight}kg</h4>
+                            <small class="text-muted">Last recorded: ${timeText}</small>
+                        </div>
+                    `;
+          } else {
+            currentWeightDiv.innerHTML =
+              '<p class="text-muted text-center">No weight recorded yet.</p>';
+          }
+        }
+
+        renderCalendar() {
+          const monthNames = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+
+          document.getElementById("currentMonth").textContent = `${
+            monthNames[this.currentDate.getMonth()]
+          } ${this.currentDate.getFullYear()}`;
+
+          const firstDay = new Date(
+            this.currentDate.getFullYear(),
+            this.currentDate.getMonth(),
+            1
+          );
+          const lastDay = new Date(
+            this.currentDate.getFullYear(),
+            this.currentDate.getMonth() + 1,
+            0
+          );
+          const startDate = new Date(firstDay);
+          startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+          const calendarGrid = document.getElementById("calendarGrid");
+          let calendarHTML = '<div class="row mb-2">';
+
+          // Day headers
+          const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+          dayHeaders.forEach((day) => {
+            calendarHTML += `<div class="col text-center fw-bold text-muted">${day}</div>`;
+          });
+          calendarHTML += "</div>";
+
+          // Calendar days
+          const current = new Date(startDate);
+          for (let week = 0; week < 6; week++) {
+            calendarHTML += '<div class="row mb-1">';
+            for (let day = 0; day < 7; day++) {
+              const dateStr = current.toISOString().split("T")[0];
+              const hasWorkout = this.workouts.some((w) => w.date === dateStr);
+              const isCurrentMonth =
+                current.getMonth() === this.currentDate.getMonth();
+
+              let dayClass = "calendar-day";
+              if (hasWorkout) dayClass += " has-workout";
+              if (!isCurrentMonth) dayClass += " text-muted";
+
+              calendarHTML += `
+                            <div class="col text-center">
+                                <span class="${dayClass}" title="${
+                hasWorkout ? "Workout day" : "No workout"
+              }">
+                                    ${current.getDate()}
+                                </span>
+                            </div>
+                        `;
+              current.setDate(current.getDate() + 1);
+            }
+            calendarHTML += "</div>";
+
+            if (
+              current.getMonth() !== this.currentDate.getMonth() &&
+              current > lastDay
+            ) {
+              break;
+            }
+          }
+
+          calendarGrid.innerHTML = calendarHTML;
+        }
+
+        renderWeightChart() {
+          const ctx = document.getElementById("weightChart");
+          if (!ctx) return;
+
+          // Clear existing chart
+          if (window.weightChart) {
+            window.weightChart.destroy();
+          }
+
+          const sortedWeights = this.bodyWeights.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
+
+          if (sortedWeights.length === 0) {
+            ctx.parentElement.innerHTML =
+              '<p class="text-muted text-center">No body weight data to display.</p>';
+            return;
+          }
+
+          const labels = sortedWeights.map((w) => this.formatDate(w.date));
+          const data = sortedWeights.map((w) => w.weight);
+
+          window.weightChart = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Body Weight (kg)",
+                  data: data,
+                  borderColor: "#4f46e5",
+                  backgroundColor: "rgba(79, 70, 229, 0.1)",
+                  borderWidth: 3,
+                  fill: true,
+                  tension: 0.4,
+                  pointBackgroundColor: "#4f46e5",
+                  pointBorderColor: "#ffffff",
+                  pointBorderWidth: 2,
+                  pointRadius: 6,
+                  pointHoverRadius: 8,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: false,
+                  grid: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                  },
+                  ticks: {
+                    callback: function (value) {
+                      return value + " kg";
+                    },
+                  },
+                },
+                x: {
+                  grid: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                  },
+                },
+              },
+              elements: {
+                point: {
+                  hoverBackgroundColor: "#4f46e5",
+                },
+              },
+            },
+          });
+        }
+
+        formatDateShort(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+        }
+
+        showNotification(message, type = "success") {
+          // Create notification element
+          const notification = document.createElement("div");
+          const iconMap = {
+            success: "fas fa-check-circle",
+            danger: "fas fa-exclamation-circle",
+            warning: "fas fa-trophy",
+            info: "fas fa-info-circle",
+          };
+
+          notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+          notification.style.cssText = `
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                    min-width: 350px;
+                    max-width: 400px;
+                    border-radius: 15px;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+                    border: none;
+                    font-weight: 500;
+                `;
+
+          notification.innerHTML = `
+                    <i class="${
+                      iconMap[type] || iconMap.success
+                    } me-2"></i>${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+
+          document.body.appendChild(notification);
+
+          // Auto-remove after 4 seconds (longer for PR notifications)
+          const autoRemoveTime = type === "warning" ? 5000 : 3000;
+          setTimeout(() => {
+            if (notification.parentElement) {
+              notification.classList.remove("show");
+              setTimeout(() => notification.remove(), 150);
+            }
+          }, autoRemoveTime);
+        }
+      }
+
+      // Initialize the workout tracker when the page loads
+      let workoutTracker;
+      document.addEventListener("DOMContentLoaded", () => {
+        workoutTracker = new WorkoutTracker();
+      });
+
+      // Initialize with empty data
+      window.workoutData = [];
+      window.bodyWeightData = [];
+    </script>
+  </body>
+</html>
